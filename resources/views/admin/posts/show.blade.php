@@ -12,6 +12,14 @@
                     @else
                     <h6>Categoria: </h6>
                     @endif
+                    @if(count($post->tags) > 0)
+                    <h6 class="d-inline">Tags: </h6>
+                    @foreach ($post->tags as $tag)
+                        <span class="badge badge-info">{{$tag->name}}</span>
+                    @endforeach
+                    @else
+                    <h6>Tags: Nessuno</h6>
+                    @endif
                 </div>
                 @if($post->image)
                     <img src="{{asset("storage/{$post->image}")}}" alt="{{$post->title}}">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Category;
+use App\Tag;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -31,8 +32,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.create', compact("categories"));
+        return view('admin.posts.create', compact("categories", "tags"));
     }
 
     /**
@@ -49,6 +51,7 @@ class PostController extends Controller
             "image" => "nullable|mimes:jpeg,jpg,png|max:2048",
             "published" => "sometimes|accepted",
             "category_id" => "nullable|exists:categories,id",
+            "tags" => "nullable|exists:tags,id",
         ]);
         $data = $request->all();
 
@@ -78,6 +81,10 @@ class PostController extends Controller
 
         $newPost->save();
 
+        if(isset($data['tags'])){
+            $newPost->tags()->sync($data['tags']);
+        }
+
         return redirect()->route("posts.show", $newPost->id);
     }
 
@@ -101,8 +108,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.edit', compact('post', 'categories'));
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -120,6 +128,7 @@ class PostController extends Controller
             "image" => "nullable|mimes:jpeg,jpg,png|max:2048",
             "published" => "sometimes|accepted",
             "category_id" => "nullable|exists:categories,id",
+            "tags" => "nullable|exists:tags,id",
         ]);
 
         $data = $request->all();
@@ -158,6 +167,11 @@ class PostController extends Controller
         }
 
         $post->save();
+
+        if(isset($data['tags'])){
+            $post->tags()->sync($data["tags"]);
+        }
+        else $post->tags()->sync(null);
 
         return redirect()->route('posts.show', $post->id);
     }
