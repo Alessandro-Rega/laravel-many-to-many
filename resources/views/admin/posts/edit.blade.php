@@ -64,6 +64,7 @@
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
+                <hr>
                 <div class="mb-3 form-check">
                     @php
                         $published = old('published') ? old('published') : $post->published; 

@@ -13,7 +13,7 @@ class TagSeeder extends Seeder
      */
     public function run()
     {
-        $tags = ["finanza", "computer"];
+        $tags = ["Finanza", "Computer", "News", "Istruzione", "Animali", "Viaggi"];
 
         foreach($tags as $tag){
             $newTag = new Tag();
